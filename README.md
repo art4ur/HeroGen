@@ -52,6 +52,13 @@ npm run dist:linux  # AppImage + .deb
 
 Output goes to `dist/`.
 
+**Recommended for Windows/Mac:** don't cross-build. The repo has a GitHub
+Actions workflow (`.github/workflows/build.yml`) that builds each platform on
+its own native runner — run it manually from the Actions tab, or push a `v*`
+tag. Installers land as downloadable artifacts per OS. This matters because
+cross-building Windows from Linux requires Wine just to stamp the exe icon
+and metadata.
+
 Cross-building notes (electron-builder):
 
 - **macOS** builds effectively need to run on a Mac; code signing/notarization
