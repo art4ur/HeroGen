@@ -1,1 +1,62 @@
-{"build":{"appId":"com.premazon.herogen","directories":{"output":"dist"},"files":["index.html","style.css","app.js","main.js","preload.js","bg.webp","logo.svg","vendor/**","package.json"],"linux":{"category":"Graphics","target":["AppImage","deb"]},"mac":{"category":"public.app-category.graphics-design","target":["dmg","zip"]},"nsis":{"allowToChangeInstallationDirectory":true,"oneClick":false},"productName":"HeroGen","win":{"target":["nsis","portable"]}},"description":"Featured-image generator: swap a client's logo and color block over a background, export at 1440x1080, save reusable profiles.","devDependencies":{"electron":"^33.2.0","electron-builder":"^25.1.8"},"main":"main.js","author":"Arthur Reeder <arthur@premazon.com>","name":"herogen","private":true,"scripts":{"dist":"electron-builder","dist:linux":"electron-builder --linux","dist:mac":"electron-builder --mac","dist:win":"electron-builder --win","pack":"electron-builder --dir","start":"electron ."},"version":"1.0.0"}
+{
+  "build": {
+    "appId": "com.premazon.herogen",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "index.html",
+      "style.css",
+      "app.js",
+      "main.js",
+      "preload.js",
+      "bg.webp",
+      "logo.svg",
+      "vendor/**",
+      "package.json"
+    ],
+    "linux": {
+      "category": "Graphics",
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "mac": {
+      "category": "public.app-category.graphics-design",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "nsis": {
+      "allowToChangeInstallationDirectory": true,
+      "oneClick": false
+    },
+    "productName": "HeroGen",
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    }
+  },
+  "description": "Featured-image generator: swap a client's logo and color block over a background, export at 1440x1080, save reusable profiles.",
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  },
+  "main": "main.js",
+  "author": "Arthur Reeder <arthur@premazon.com>",
+  "name": "herogen",
+  "private": true,
+  "scripts": {
+    "dist": "electron-builder --publish never",
+    "dist:linux": "electron-builder --linux --publish never",
+    "dist:mac": "electron-builder --mac --publish never",
+    "dist:win": "electron-builder --win --publish never",
+    "pack": "electron-builder --dir",
+    "start": "electron ."
+  },
+  "version": "1.0.0"
+}
