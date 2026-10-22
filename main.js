@@ -30,6 +30,10 @@ function createWindow() {
     minWidth: 900,
     minHeight: 700,
     title: 'HeroGen',
+    // Explicit window icon: without this, Linux desktops (KDE/GNOME) show a
+    // generic icon for the running app/taskbar even when the launcher
+    // entry has one.
+    icon: path.join(__dirname, 'assets', 'icon.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,

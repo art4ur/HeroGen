@@ -61,7 +61,12 @@ input[type="range"] { width: 100%; margin-top: 0.3rem; }
 .herobox {
   width: 1440px;
   height: 1080px;
-  background: #e0e0e0 url(bg.webp) center / cover no-repeat;
+  /* Default background is a plain solid color. Uploading a background image
+     in the app sets an inline background-image over this. */
+  background-color: #2c3e50;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   position: relative;
 }
 /* Dimensions below are the original design values, unchanged — the stage

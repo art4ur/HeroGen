@@ -91,5 +91,6 @@ Cross-building notes (electron-builder):
 |---|---|
 | `index.html` / `style.css` / `app.js` | The generator UI and logic |
 | `main.js` / `preload.js` | Electron main process + profile-file bridge |
-| `bg.webp` / `logo.svg` | Bundled default background and logo |
+| `logo.svg` | Bundled placeholder logo (a plain circle — swap in a real logo in the app). The default background is a solid color defined in `style.css`; there is no bundled background image |
+| `build/icon.png` + `build/icons/` + `assets/icon.png` | The "General" app icon: master 1024px, a full Linux icon set, and the window icon the app loads at runtime |
 | `vendor/html2canvas.min.js` | Vendored html2canvas 1.4.1 (MIT) — no CDN needed, works offline |
