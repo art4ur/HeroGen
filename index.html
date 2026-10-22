@@ -3,88 +3,105 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HeroGen</title>
+  <title>HeroGen — Featured Image Generator</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
     <h1>HeroGen</h1>
-    <nav>
-      <a href="#" id="export-btn">Export</a>
-    </nav>
+    <div class="header-actions">
+      <label class="format-label">Format
+        <select id="export-format">
+          <option value="image/webp" selected>WebP</option>
+          <option value="image/png">PNG</option>
+          <option value="image/jpeg">JPG</option>
+        </select>
+      </label>
+      <button id="export-btn" class="primary">Export 1440 × 1080</button>
+    </div>
   </header>
 
-  <main>
-    <section>
-    <div class="herobox">
-        <div class="overlaybox">
-            <div class="overly-left"><img alt="Logo" src="logo.svg"></div>
-            <div class="centerline">
-                <div class="color"></div>
-            </div>
-            <div class="overly-right">Clearly We Did NOT Think This Through</div>
+  <div class="layout">
+    <aside class="controls">
+      <section class="panel">
+        <h2>Profile</h2>
+        <label>Saved profiles
+          <select id="profile-select"><option value="">— none saved —</option></select>
+        </label>
+        <label>Profile name
+          <input type="text" id="profile-name" placeholder="e.g. Client — Light logo" />
+        </label>
+        <div class="row">
+          <button id="profile-save">Save profile</button>
+          <button id="profile-delete" class="danger">Delete</button>
         </div>
-    </div>
-    </section>
+        <div class="row">
+          <button id="profile-export">Export profiles</button>
+          <button id="profile-import-btn">Import</button>
+          <input type="file" id="profile-import" accept="application/json" hidden />
+        </div>
+        <p class="hint">A profile saves logo, color block, background, headline and logo size. In the desktop app profiles are stored in a file on your machine; in a browser they're stored locally in that browser.</p>
+      </section>
 
-  </main>
+      <section class="panel">
+        <h2>Logo</h2>
+        <label class="drop" id="logo-drop">
+          <span>Click or drop a logo here<br /><small>SVG, PNG, JPG or WebP</small></span>
+          <input type="file" id="logo-input" accept="image/*,.svg" hidden />
+        </label>
+        <label>Logo size <span id="logo-scale-value">100%</span>
+          <input type="range" id="logo-scale" min="30" max="180" value="100" />
+        </label>
+        <button id="logo-reset">Reset to default logo</button>
+      </section>
 
-  <footer>
-    <p>&copy; 2026 HeroGen. All rights reserved.</p>
-  </footer>
+      <section class="panel">
+        <h2>Color block</h2>
+        <div class="row color-row">
+          <input type="color" id="block-color" value="#7ba5a1" />
+          <input type="text" id="block-color-hex" value="#7ba5a1" spellcheck="false" />
+        </div>
+        <label>Block opacity <span id="block-opacity-value">95%</span>
+          <input type="range" id="block-opacity" min="30" max="100" value="95" />
+        </label>
+      </section>
 
-  <!-- html2canvas for DOM-to-image capture -->
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <script>
-    document.getElementById('export-btn').addEventListener('click', async (e) => {
-      e.preventDefault();
+      <section class="panel">
+        <h2>Background</h2>
+        <label class="drop" id="bg-drop">
+          <span>Click or drop a background here<br /><small>Any image — it will cover 1440 × 1080</small></span>
+          <input type="file" id="bg-input" accept="image/*" hidden />
+        </label>
+        <button id="bg-reset">Reset to default background</button>
+      </section>
 
-      const heroBox = document.querySelector('.herobox');
-      if (!heroBox) {
-        alert('Hero box not found!');
-        return;
-      }
+      <section class="panel">
+        <h2>Headline</h2>
+        <label>Text
+          <textarea id="headline" rows="3">Clearly We Did NOT Think This Through</textarea>
+        </label>
+      </section>
+    </aside>
 
-      // Show loading state
-      const btn = document.getElementById('export-btn');
-      const originalText = btn.textContent;
-      btn.textContent = 'Exporting...';
-      btn.style.pointerEvents = 'none';
+    <main class="preview">
+      <div class="stage-viewport" id="stage-viewport">
+        <div class="stage-scaler" id="stage-scaler">
+          <div class="herobox" id="herobox">
+            <div class="overlaybox" id="overlaybox">
+              <div class="overly-left"><img id="logo-img" alt="Logo" src="logo.svg" /></div>
+              <div class="centerline"><div class="color"></div></div>
+              <div class="overly-right" id="headline-preview">Clearly We Did NOT Think This Through</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="hint center">Preview is scaled to fit — export is always exactly 1440 × 1080.</p>
+    </main>
+  </div>
 
-      try {
-        // Render the hero box to canvas
-        const canvas = await html2canvas(heroBox, {
-          scale: 2,                    // 2x for crisp output
-          useCORS: true,               // allow cross-origin images
-          backgroundColor: null,       // transparent background if needed
-          logging: false,
-        });
+  <footer><p>&copy; 2026 HeroGen. All rights reserved.</p></footer>
 
-        // Convert to WebP blob and trigger download
-        canvas.toBlob((blob) => {
-          if (!blob) {
-            throw new Error('Failed to create WebP blob');
-          }
-
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `herogen-export-${Date.now()}.webp`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-        }, 'image/webp', 0.92);  // 92% quality
-
-      } catch (err) {
-        console.error('Export failed:', err);
-        alert('Export failed: ' + err.message);
-      } finally {
-        btn.textContent = originalText;
-        btn.style.pointerEvents = 'auto';
-      }
-    });
-  </script>
+  <script src="vendor/html2canvas.min.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
-
