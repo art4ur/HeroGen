@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HeroGen</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>HeroGen</h1>
+    <nav>
+      <a href="#" id="export-btn">Export</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+    <div class="herobox">
+        <div class="overlaybox">
+            <div class="overly-left"><img alt="Logo" src="logo.svg"></div>
+            <div class="centerline">
+                <div class="color"></div>
+            </div>
+            <div class="overly-right">Clearly We Did NOT Think This Through</div>
+        </div>
+    </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2026 HeroGen. All rights reserved.</p>
+  </footer>
+
+  <!-- html2canvas for DOM-to-image capture -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script>
+    document.getElementById('export-btn').addEventListener('click', async (e) => {
+      e.preventDefault();
+
+      const heroBox = document.querySelector('.herobox');
+      if (!heroBox) {
+        alert('Hero box not found!');
+        return;
+      }
+
+      // Show loading state
+      const btn = document.getElementById('export-btn');
+      const originalText = btn.textContent;
+      btn.textContent = 'Exporting...';
+      btn.style.pointerEvents = 'none';
+
+      try {
+        // Render the hero box to canvas
+        const canvas = await html2canvas(heroBox, {
+          scale: 2,                    // 2x for crisp output
+          useCORS: true,               // allow cross-origin images
+          backgroundColor: null,       // transparent background if needed
+          logging: false,
+        });
+
+        // Convert to WebP blob and trigger download
+        canvas.toBlob((blob) => {
+          if (!blob) {
+            throw new Error('Failed to create WebP blob');
+          }
+
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `herogen-export-${Date.now()}.webp`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 'image/webp', 0.92);  // 92% quality
+
+      } catch (err) {
+        console.error('Export failed:', err);
+        alert('Export failed: ' + err.message);
+      } finally {
+        btn.textContent = originalText;
+        btn.style.pointerEvents = 'auto';
+      }
+    });
+  </script>
+</body>
+</html>
+
