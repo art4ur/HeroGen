@@ -10,6 +10,10 @@ on:
   push:
     tags: ['v*']
 
+# Needed so tagged builds can create/update the GitHub Release.
+permissions:
+  contents: write
+
 jobs:
   build:
     strategy:
@@ -44,4 +48,23 @@ jobs:
             dist/*.exe
             dist/*.dmg
             dist/*.zip
+            dist/*.yml
           if-no-files-found: ignore
+      # On a version tag (e.g. v1.0.0), each OS job attaches its installers
+      # to the same GitHub Release for that tag — that's the public
+      # download page: github.com/art4ur/HeroGen/releases
+      # The release starts as a DRAFT so you can write notes and check the
+      # assets before anyone can download them; hit "Publish release"
+      # when it looks right. Manual (workflow_dispatch) runs skip this.
+      - name: Publish to GitHub Release (draft)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          files: |
+            dist/*.AppImage
+            dist/*.deb
+            dist/*.exe
+            dist/*.dmg
+            dist/*.zip
+            dist/*.yml

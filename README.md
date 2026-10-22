@@ -52,6 +52,23 @@ npm run dist:linux  # AppImage + .deb
 
 Output goes to `dist/`.
 
+## Distributing a release
+
+Push a version tag and the Actions workflow builds all three platforms
+natively and attaches the installers to a **draft GitHub Release** for that
+tag:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+When the builds finish, open the repo's **Releases** page, check the assets
+(Linux AppImage + .deb, Windows installer + portable .exe, Mac .dmg + .zip),
+write release notes, and click **Publish release**. Anyone can then download
+from `github.com/art4ur/HeroGen/releases`, and
+`.../releases/latest` always points at the newest published release.
+
 **Recommended for Windows/Mac:** don't cross-build. The repo has a GitHub
 Actions workflow (`.github/workflows/build.yml`) that builds each platform on
 its own native runner — run it manually from the Actions tab, or push a `v*`
